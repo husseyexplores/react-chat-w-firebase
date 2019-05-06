@@ -21,6 +21,10 @@
 .idea
 .env
 
+.firebase
+.firebaserc
+firebase.json
+
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*

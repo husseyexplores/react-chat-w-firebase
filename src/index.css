@@ -221,5 +221,38 @@ body {
 
 .Login {
   text-align: center;
-  margin-top: 55px;
+  margin: 55px 0;
+}
+
+.Login button,
+.Login input {
+  display: block;
+  margin: 0 auto;
+  font-size: 1rem;
+}
+
+.Login button {
+  border: none;
+  background: #524763;
+  padding: 10px 25px;
+  border-radius: 3px;
+  color: #fff;
+}
+
+.Login input {
+  padding: 8px 10px;
+  margin-bottom: 10px;
+  border-radius: 3px;
+  border: 1px solid rgb(202, 202, 202);
+  color: #444;
+}
+
+.error-wrapper {
+  display: inline-block;
+  background: #ffdee4;
+  text-align: center;
+  margin-top: 20px;
+  padding: 10px;
+  border-radius: 3px;
+  border-top: 3px solid #f19d9d;
 }
