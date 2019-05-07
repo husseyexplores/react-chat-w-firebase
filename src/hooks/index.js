@@ -33,7 +33,7 @@ const docPendingCache = {}
  *
  * @param {string} firestoreDocPath Doc Path - Firestore Doc Path
  */
-export function useDoc(path) {
+export function useDocWithCache(path) {
   const [doc, setDoc] = useState(docCache[path])
 
   useEffect(() => {
@@ -63,6 +63,24 @@ export function useDoc(path) {
       stillMounted = false
     }
   }, [doc, path])
+
+  return doc
+}
+
+/////////////////////////////////////////////////////////////////////////////////
+
+/**
+ *
+ * @param {string} firestoreQuery - Firestore collection path
+ */
+export function useDoc(path) {
+  const [doc, setDoc] = useState(null)
+
+  useEffect(() => {
+    return firestore.doc(path).onSnapshot(doc => {
+      setDoc({ id: doc.id, ...doc.data() })
+    })
+  }, [path])
 
   return doc
 }
@@ -104,3 +122,5 @@ export function useAuth() {
 
   return { user, authIsReady }
 }
+
+/////////////////////////////////////////////////////////////////////////////////

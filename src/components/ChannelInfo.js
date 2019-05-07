@@ -17,7 +17,7 @@ function ChannelInfo({ channelId }) {
           readOnly
         />
       </div>
-      <div className="ChannelName">#{channel ? channel.id : '...'}</div>
+      <div className="ChannelName">#{channelId}</div>
     </div>
   )
 }
