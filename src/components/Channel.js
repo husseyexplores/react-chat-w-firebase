@@ -1,16 +1,24 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { string } from 'prop-types'
+
+import { firestore } from '../firebase'
+import { userPropType } from '../common/proptypes'
 
 import ChannelInfo from './ChannelInfo'
 import Messages from './Messages'
 import ChatInputBox from './ChatInputBox'
 import Members from './Members'
 
-import { userPropType } from '../common/proptypes'
-
 /////////////////////////////////////////////////////////////////////////////////
 
 function Channel({ user, channelId }) {
+  // update users channels in firestore
+  useEffect(() => {
+    firestore.doc(`users/${user.uid}`).update({
+      [`channels.${channelId}`]: true,
+    })
+  }, [channelId, user])
+
   return (
     <div className="Channel">
       <div className="ChannelMain">
@@ -18,7 +26,7 @@ function Channel({ user, channelId }) {
         <Messages user={user} channelId={channelId} />
         <ChatInputBox user={user} channelId={channelId} />
       </div>
-      <Members />
+      <Members channelId={channelId} />
     </div>
   )
 }

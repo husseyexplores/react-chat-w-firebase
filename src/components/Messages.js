@@ -11,9 +11,9 @@ import { userPropType } from '../common/proptypes'
 /////////////////////////////////////////////////////////////////////////////////
 
 function Messages({ channelId }) {
-  const messages = useCollection(
-    `collection(channels/${channelId}/messages).orderBy(createdAt)`
-  )
+  const messages = useCollection(`channels/${channelId}/messages`, {
+    orderBy: 'createdAt',
+  })
 
   const scrollerRef = useRef()
 

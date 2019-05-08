@@ -9,7 +9,7 @@ import { userPropType } from '../common/proptypes'
 /////////////////////////////////////////////////////////////////////////////////
 
 function Nav({ user: { photoURL, displayName } }) {
-  const channels = useCollection('collection(channels)')
+  const channels = useCollection('channels')
 
   return (
     <div className="Nav">

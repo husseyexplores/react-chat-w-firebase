@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react'
-import { getFirestoreRef } from '../utils/helpers'
 
-import firebase, { firestore } from '../firebase'
+import firebase, { firestore, setupPresence } from '../firebase'
 
 /////////////////////////////////////////////////////////////////////////////////
 
@@ -9,18 +8,44 @@ import firebase, { firestore } from '../firebase'
  *
  * @param {string} firestoreQuery - Firestore collection path
  */
-export function useCollection(query) {
+export function useCollection(path, { orderBy, where = [] } = {}) {
   const [docs, setDocs] = useState(null)
 
+  if (!Array.isArray(where)) {
+    throw new Error(
+      `Expected \`where\` arg to be an array, but found ${typeof where}. \n Please provide a valid array`
+    )
+  }
+
+  if (where.length > 0 && where.length !== 3) {
+    throw new Error(
+      `Expected 3 items in the \`where\` arg array, but found ${
+        where.length
+      } items. Please provide an array with 3 items`
+    )
+  }
+
+  const [queryField, queryOperator, queryValue] = where
+
   useEffect(() => {
-    return getFirestoreRef(query).onSnapshot(snap => {
+    let collection = firestore.collection(path)
+
+    if (orderBy !== undefined) {
+      collection = collection.orderBy(orderBy)
+    }
+
+    if (where.length === 3 && queryField) {
+      collection = collection.where(queryField, queryOperator, queryValue)
+    }
+
+    return collection.onSnapshot(snap => {
       const docs = []
       snap.forEach(doc => {
         docs.push({ id: doc.id, ...doc.data() })
       })
       setDocs(docs)
     })
-  }, [query])
+  }, [orderBy, path, queryField, queryOperator, queryValue, where.length])
 
   return docs
 }
@@ -114,6 +139,9 @@ export function useAuth() {
           .collection('users')
           .doc(user.uid)
           .set(user, { merge: true })
+
+        // update user presnece
+        setupPresence(user)
       } else {
         setUser(null)
       }
